@@ -1,0 +1,59 @@
+//Computer Design Lab. Midterm
+//Name:ZAINAB AL TAYYEB 
+
+module final1(SW,LEDR);
+input[17:0] SW;
+output[17:0] LEDR;
+ADD_SUB  add_or_sub(SW[7:0],SW[15:8],SW[17:16],LEDR[17:0]);
+
+endmodule
+
+module full(S,Cout,A,B,Cin);
+   input [4:0]	A, B;
+   input	 Cin;
+	output [4:0]	S;
+	output Cout;
+	wire 	Cout0, Cout1, Cout2;
+
+FA_1bit 	FA1(S[0], Cout0,A[0],B[0],Cin);
+FA_1bit 	FA2(S[1], Cout1,A[1],B[1],Cout0);
+FA_1bit 	FA3(S[2], Cout2,A[2],B[2],Cout1);
+FA_1bit 	FA4(S[3], Cout,A[3],B[3],Cout2);
+endmodule
+module full8(S,Cout,A,B,Cin);
+   input [4:0]	A, B;
+   input	 Cin;
+	output [4:0]	S;
+	output Cout;
+	wire 	Cout0, Cout1, Cout2;
+full full1(S[0], Cout0,A[0],B[0],Cin);
+full full2(S[1], Cout1,A[1],B[1],Cout0);
+endmodule
+
+module FA_1bit (S,Cout,A,B,Cin);
+   input A,B,Cin; 
+   output S, Cout;
+	assign Sum = (A^B)^Cin;
+	assign Carry = (A&B) | ((A^B)& Cin);
+endmodule
+
+module ADD_SUB(A,B,opcode,result);
+input [4:0]	A, B;
+output [7:0] result;
+input [1:0] opcode;
+reg [7:0] result;
+wire res;
+assign res = result;
+
+parameter   ADD = 1'b0;
+parameter   SUB = 1'b1;
+
+always@*
+begin
+    case(opcode)
+        ADD: begin result <= A + B;  end
+        SUB: begin result <= A - B; end 
+		  default: result <= 8'b0000000000000000;		  
+    endcase
+end
+endmodule
